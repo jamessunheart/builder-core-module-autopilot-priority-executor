@@ -31,3 +31,8 @@ class AutopilotPriorityExecutor:
 
     def get_execution_history(self):
         return self.execution_log
+
+# Trigger first cycle
+executor = AutopilotPriorityExecutor()
+log = executor.run_autopilot_cycle()
+print("Execution Log:", log)
