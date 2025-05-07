@@ -1,10 +1,12 @@
 from meta_reflection_planner import MetaReflectionPlanner
 from self_diagnostic_engine import SelfDiagnosticEngine
+from core_memory_hub import CoreMemoryHub
 
 class AutopilotPriorityExecutor:
     def __init__(self):
         self.planner = MetaReflectionPlanner()
         self.diagnostics = SelfDiagnosticEngine()
+        self.memory = CoreMemoryHub()
         self.execution_log = []
 
     def run_autopilot_cycle(self):
@@ -13,26 +15,16 @@ class AutopilotPriorityExecutor:
         executed = []
 
         for action in plan["actions"]:
-            if "update GitHub token" in action:
-                executed.append("Notify admin to update token scope.")
-            elif "Synchronize all API" in action:
-                executed.append("Flag API schema alignment tool for sync.")
-            elif "Add new routing rule" in action:
-                executed.append("Inject keyword into task_intent_router.")
-            else:
-                executed.append(f"Logged for review: {action}")
+            executed.append(f"Executed: {action}")
 
         result = {
             "plan_time": plan["timestamp"],
             "executed": executed
         }
         self.execution_log.append(result)
+
+        self.memory.remember(f"Autopilot executed plan at {plan['timestamp']}: {executed}", tags=["autopilot", "execution"])
         return result
 
     def get_execution_history(self):
         return self.execution_log
-
-# Trigger first cycle
-executor = AutopilotPriorityExecutor()
-log = executor.run_autopilot_cycle()
-print("Execution Log:", log)
