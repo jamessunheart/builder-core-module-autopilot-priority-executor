@@ -1,17 +1,15 @@
 from meta_reflection_planner import MetaReflectionPlanner
+from self_diagnostic_engine import SelfDiagnosticEngine
 
 class AutopilotPriorityExecutor:
-    """
-    Executes or routes high-confidence improvement actions automatically
-    using plans from MetaReflectionPlanner.
-    """
-
     def __init__(self):
         self.planner = MetaReflectionPlanner()
+        self.diagnostics = SelfDiagnosticEngine()
         self.execution_log = []
 
     def run_autopilot_cycle(self):
-        plan = self.planner.auto_reflect()
+        diagnostics_report = self.diagnostics.run_diagnostics()
+        plan = self.planner.generate_improvement_plan(diagnostics_report)
         executed = []
 
         for action in plan["actions"]:
